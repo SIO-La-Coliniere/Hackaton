@@ -21,7 +21,7 @@ class Inscription
     private ?\DateTime $date = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $compÃetence = null;
+    private ?string $competence = null;
 
     public function getId(): ?int
     {
@@ -52,15 +52,16 @@ class Inscription
         return $this;
     }
 
-    public function getCompÃetence(): ?string
+    public function getCompetence(): ?string
     {
-        return $this->compÃetence;
+        return $this->competence;
     }
 
-    public function setCompÃetence(string $compÃetence): static
+    public function setCompetence(string $competence): static
     {
-        $this->compÃetence = $compÃetence;
+        $this->competence = $competence;
 
         return $this;
     }
+
 }
