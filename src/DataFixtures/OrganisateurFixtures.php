@@ -4,10 +4,13 @@ namespace App\DataFixtures;
 
 use App\Entity\Organisateur;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class OrganisateurFixtures extends Fixture
+class OrganisateurFixtures extends Fixture implements FixtureGroupInterface
 {
+    public const NB_ORGA = 3;
     public function load(ObjectManager $manager): void
     {
 
@@ -18,8 +21,15 @@ class OrganisateurFixtures extends Fixture
             $organisateur->setSiteweb('https://patrick.fr');
             $organisateur->setEmail('patrick@gmail.com');
             $manager->persist($organisateur);
+
+            $this->addReference('organisateur_' . $i, $organisateur);
         }
 
         $manager->flush();
+    }
+    public static function getGroups(): array
+    {
+        // TODO: Implement getGroups() method.
+        return ['done'];
     }
 }

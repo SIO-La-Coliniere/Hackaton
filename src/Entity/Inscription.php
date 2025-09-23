@@ -23,6 +23,14 @@ class Inscription
     #[ORM\Column(length: 255)]
     private ?string $competence = null;
 
+    #[ORM\ManyToOne(inversedBy: 'inscriptions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Participant $participant = null;
+
+    #[ORM\ManyToOne(inversedBy: 'inscription')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Hackathon $hackathon = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +68,30 @@ class Inscription
     public function setCompetence(string $competence): static
     {
         $this->competence = $competence;
+
+        return $this;
+    }
+
+    public function getParticipant(): ?Participant
+    {
+        return $this->participant;
+    }
+
+    public function setParticipant(?Participant $participant): static
+    {
+        $this->participant = $participant;
+
+        return $this;
+    }
+
+    public function getHackathon(): ?Hackathon
+    {
+        return $this->hackathon;
+    }
+
+    public function setHackathon(?Hackathon $hackathon): static
+    {
+        $this->hackathon = $hackathon;
 
         return $this;
     }

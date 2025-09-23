@@ -3,11 +3,15 @@
 namespace App\DataFixtures;
 
 use App\Entity\Hackathon;
+use App\Entity\Organisateur;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class HackathonFixtures extends Fixture
+class HackathonFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
+    public const NB_HACK = 3;
     public function load(ObjectManager $manager): void
     {
 
@@ -22,9 +26,26 @@ class HackathonFixtures extends Fixture
             $hackathon->setLieu('La Coliniere');
             $hackathon->setVille('Nantes');
             $hackathon->setTheme('Developpement');
+
+            $organisateurID = random_int(0, OrganisateurFixtures::NB_ORGA - 1);
+            $organisateur = $this->getReference('organisateur_' . $organisateurID, Organisateur::class);
+            $hackathon->setOrganisateur($organisateur);
             $manager->persist($hackathon);
+
+            $this->addReference('hackathon_'.$i, $hackathon);
         }
 
         $manager->flush();
+    }
+    public function getDependencies(): array
+    {
+        // TODO: Implement getDependencies() method.
+        return [OrganisateurFixtures::class];
+    }
+
+    public static function getGroups(): array
+    {
+        // TODO: Implement getGroups() method.
+        return ['done'];
     }
 }

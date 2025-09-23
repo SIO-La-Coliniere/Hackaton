@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProjetRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjetRepository::class)]
@@ -18,6 +20,21 @@ class Projet
 
     #[ORM\Column]
     private ?bool $retenu = null;
+
+    #[ORM\ManyToOne(inversedBy: 'projets')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Hackathon $hackathon = null;
+
+    /**
+     * @var Collection<int, Equipe>
+     */
+    #[ORM\OneToMany(targetEntity: Equipe::class, mappedBy: 'projet')]
+    private Collection $equipes;
+
+    public function __construct()
+    {
+        $this->equipes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -51,6 +68,48 @@ class Projet
     public function setRetenu(bool $retenu): static
     {
         $this->retenu = $retenu;
+
+        return $this;
+    }
+
+    public function getHackathon(): ?Hackathon
+    {
+        return $this->hackathon;
+    }
+
+    public function setHackathon(?Hackathon $hackathon): static
+    {
+        $this->hackathon = $hackathon;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Equipe>
+     */
+    public function getEquipes(): Collection
+    {
+        return $this->equipes;
+    }
+
+    public function addEquipe(Equipe $equipe): static
+    {
+        if (!$this->equipes->contains($equipe)) {
+            $this->equipes->add($equipe);
+            $equipe->setProjet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipe(Equipe $equipe): static
+    {
+        if ($this->equipes->removeElement($equipe)) {
+            // set the owning side to null (unless already changed)
+            if ($equipe->getProjet() === $this) {
+                $equipe->setProjet(null);
+            }
+        }
 
         return $this;
     }

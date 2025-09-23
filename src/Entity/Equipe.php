@@ -19,6 +19,10 @@ class Equipe
     #[ORM\Column(length: 255)]
     private ?string $lienPrototype = null;
 
+    #[ORM\ManyToOne(inversedBy: 'equipes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Projet $projet = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +55,18 @@ class Equipe
     public function setLienPrototype(string $lienPrototype): static
     {
         $this->lienPrototype = $lienPrototype;
+
+        return $this;
+    }
+
+    public function getProjet(): ?Projet
+    {
+        return $this->projet;
+    }
+
+    public function setProjet(?Projet $projet): static
+    {
+        $this->projet = $projet;
 
         return $this;
     }
