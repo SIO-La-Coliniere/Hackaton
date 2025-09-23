@@ -22,6 +22,11 @@ class ProjetFixtures extends Fixture implements DependentFixtureInterface, Fixtu
             $equipeID = rand(1, EquipeFixtures::NB_EQUI - 1);
             $equipe = $this->getReference('equipe_'.$equipeID, EquipeFixtures::class);
             $projet->addEquipe($equipe);
+
+            $hackathonID = rand(1, HackathonFixtures::NB_HACK - 1);
+            $hackaton = $this->getReference('hackathon_'.$hackathonID, HackathonFixtures::class);
+            $projet->addHackathon($hackaton);
+
             $manager->persist($projet);
         }
 
