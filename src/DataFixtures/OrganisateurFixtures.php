@@ -20,6 +20,10 @@ class OrganisateurFixtures extends Fixture implements FixtureGroupInterface
             $organisateur->setNom('Patrick');
             $organisateur->setSiteweb('https://patrick.fr');
             $organisateur->setEmail('patrick@gmail.com');
+
+            //$hackathonID = rand(1, HackathonFixtures::NB_HACK - 1);
+            //$hackathon = $this->getReference('hackathon_'.$hackathonID, HackathonFixtures::class);
+            //$organisateur->addHackathon($hackathon);
             $manager->persist($organisateur);
 
             $this->addReference('organisateur_' . $i, $organisateur);
@@ -27,6 +31,7 @@ class OrganisateurFixtures extends Fixture implements FixtureGroupInterface
 
         $manager->flush();
     }
+
     public static function getGroups(): array
     {
         // TODO: Implement getGroups() method.

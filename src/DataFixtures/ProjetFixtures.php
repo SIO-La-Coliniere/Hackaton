@@ -3,14 +3,16 @@
 namespace App\DataFixtures;
 
 
+use App\Entity\Hackathon;
 use App\Entity\Projet;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class ProjetFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
+class ProjetFixtures extends Fixture implements DependentFixtureInterface,FixtureGroupInterface
 {
+    public const NB_PROJ = 3;
     public function load(ObjectManager $manager): void
     {
 
@@ -18,16 +20,14 @@ class ProjetFixtures extends Fixture implements DependentFixtureInterface, Fixtu
             $projet = new Projet();
             $projet->setDescription('Hugo description');
             $projet->setRetenu(true);
-
-            $equipeID = rand(1, EquipeFixtures::NB_EQUI - 1);
-            $equipe = $this->getReference('equipe_'.$equipeID, EquipeFixtures::class);
-            $projet->addEquipe($equipe);
+            $manager->persist($projet);
 
             $hackathonID = rand(1, HackathonFixtures::NB_HACK - 1);
-            $hackaton = $this->getReference('hackathon_'.$hackathonID, HackathonFixtures::class);
-            $projet->addHackathon($hackaton);
+            $hackathon = $this->getReference('hackathon_'.$hackathonID, Hackathon::class);
+            $projet->setHackathon($hackathon);
 
-            $manager->persist($projet);
+            $this->addReference('projet_'.$i, $projet);
+
         }
 
         $manager->flush();
@@ -36,9 +36,8 @@ class ProjetFixtures extends Fixture implements DependentFixtureInterface, Fixtu
     public function getDependencies(): array
     {
         // TODO: Implement getDependencies() method.
-        return [EquipeFixtures::class];
+        return [HackathonFixtures::class];
     }
-
     public static function getGroups(): array
     {
         // TODO: Implement getGroups() method.

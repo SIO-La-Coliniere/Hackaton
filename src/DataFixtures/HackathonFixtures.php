@@ -9,7 +9,7 @@ use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class HackathonFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
+class HackathonFixtures extends Fixture implements DependentFixtureInterface,FixtureGroupInterface
 {
     public const NB_HACK = 3;
     public function load(ObjectManager $manager): void
@@ -37,12 +37,12 @@ class HackathonFixtures extends Fixture implements DependentFixtureInterface, Fi
 
         $manager->flush();
     }
+
     public function getDependencies(): array
     {
         // TODO: Implement getDependencies() method.
         return [OrganisateurFixtures::class];
     }
-
     public static function getGroups(): array
     {
         // TODO: Implement getGroups() method.

@@ -3,14 +3,15 @@
 namespace App\DataFixtures;
 
 use App\Entity\Equipe;
+use App\Entity\Projet;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class EquipeFixtures extends Fixture implements FixtureGroupInterface
+class EquipeFixtures extends Fixture implements DependentFixtureInterface,FixtureGroupInterface
 {
-    public const NB_EQUI = 3;
     public function load(ObjectManager $manager): void
     {
 
@@ -19,6 +20,10 @@ class EquipeFixtures extends Fixture implements FixtureGroupInterface
             $equipe->setNom('Tyn1');
             $equipe->setLienPrototype('https://google.com');
             $manager->persist($equipe);
+
+            $projetID = rand(1, ProjetFixtures::NB_PROJ - 1);
+            $projet = $this->getReference('projet_'.$projetID, Projet::class);
+            $equipe->setProjet($projet);
 
             $this->addReference('equipe_'.$i, $equipe);
         }
@@ -30,5 +35,11 @@ class EquipeFixtures extends Fixture implements FixtureGroupInterface
     {
         // TODO: Implement getGroups() method.
         return ['done'];
+    }
+
+    public function getDependencies(): array
+    {
+        // TODO: Implement getDependencies() method.
+        return [ProjetFixtures::class];
     }
 }
