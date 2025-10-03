@@ -2,17 +2,26 @@
 
 namespace App\Controller;
 
+use App\Entity\Hackathon;
+use App\Entity\Inscription;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class InscriptionController extends AbstractController
 {
-    #[Route('/inscription', name: 'app_inscription')]
-    public function index(): Response
+    #[Route('/inscription/{id}', name: 'app_inscription')]
+    public function show(EntityManagerInterface $entityManager, int $id): JsonResponse
     {
-        return $this->render('inscription/index.html.twig', [
-            'controller_name' => 'InscriptionController',
-        ]);
+        $inscription = $entityManager->getRepository(Inscription::class)->find($id);
+        if (null === $inscription) {
+            throw new NotFoundHttpException(
+                'Inscription with id ' . $id . ' not found'
+            );
+        }
+        return $this->json(['inscription' => $inscription->getCompetence()]);
     }
 }
