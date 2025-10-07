@@ -2,17 +2,24 @@
 
 namespace App\Controller;
 
+use App\Entity\Organisateur;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class OrganisateurController extends AbstractController
 {
-    #[Route('/organisateur', name: 'app_organisateur')]
-    public function index(): Response
+    #[Route('/organisateur/{id}', name: 'app_organisateur')]
+    public function show(EntityManagerInterface $entityManager, int $id): JsonResponse
     {
-        return $this->render('organisateur/index.html.twig', [
-            'controller_name' => 'OrganisateurController',
-        ]);
+        $organisateur = $entityManager->getRepository(Organisateur::class)->find($id);
+        if (null === $organisateur) {
+            throw new NotFoundHttpException(
+                'Organisateur with id ' . $id . ' not found'
+            );
+        }
+        return $this->json(['organisateur' => $organisateur->getEmail()]);
     }
 }
