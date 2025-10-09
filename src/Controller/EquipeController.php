@@ -20,6 +20,10 @@ final class EquipeController extends AbstractController
                 'Equipe with id ' . $id . ' not found'
             );
         }
-        return $this->json(['Equipe' => $equipe->getNom()]);
+        return $this->json([
+            'Id'=> $equipe->getId(),
+            'Nom' => $equipe->getNom(),
+            'Lien Prototype' => $equipe->getLienPrototype()
+        ]);
     }
 }
