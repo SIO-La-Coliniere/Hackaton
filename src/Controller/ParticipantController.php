@@ -51,7 +51,7 @@ final class ParticipantController extends AbstractController
         $entityManager->flush();
 
         return $this->json([
-            'message' => 'Equipe created successfully',
+            'message' => 'Participant created successfully',
             'id' => $participant->getId(),
             'nom' => $participant->getNom(),
             'prenom' => $participant->getPrenom(),
