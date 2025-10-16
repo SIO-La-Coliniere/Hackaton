@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class EquipeController extends AbstractController
 {
-    #[Route('/equipe/{id}', name: 'app_equipe')]
+    #[Route('/api/equipe/{id}', name: 'app_equipe')]
     public function show(EntityManagerInterface $entityManager, int $id): JsonResponse
     {
         $equipe = $entityManager->getRepository(Equipe::class)->find($id);

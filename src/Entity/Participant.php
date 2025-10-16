@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,6 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 class Participant
 {
+    #[ApiResource(
+        operations: [
+            new Post(security: "is_granted('ROLE_ADMIN')"),
+            new GetCollection(),
+        ]
+    )]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

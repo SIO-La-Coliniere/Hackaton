@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ProjetController extends AbstractController
 {
-    #[Route('/projet/{id}', name: 'app_projet')]
+    #[Route('/api/projet/{id}', name: 'app_projet')]
     public function show(EntityManagerInterface $entityManager, int $id): JsonResponse
     {
         $projet = $entityManager->getRepository(Projet::class)->find($id);
