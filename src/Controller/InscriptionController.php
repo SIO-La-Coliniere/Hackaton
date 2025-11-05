@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class InscriptionController extends AbstractController
 {
-    #[Route('/inscription/{id}', name: 'app_inscription')]
+    #[Route('/api/inscription/{id}', name: 'app_inscription')]
     public function show(EntityManagerInterface $entityManager, int $id): JsonResponse
     {
         $inscription = $entityManager->getRepository(Inscription::class)->find($id);

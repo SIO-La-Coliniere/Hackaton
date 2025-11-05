@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class HackathonController extends AbstractController
 {
-    #[Route('/hackathon/{id}', name: 'app_hackathon')]
+    #[Route('/api/hackathon/{id}', name: 'app_hackathon')]
     public function show(EntityManagerInterface $entityManager, int $id): JsonResponse
     {
         $hackathon = $entityManager->getRepository(Hackathon::class)->find($id);

@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ParticipantController extends AbstractController
 {
-    #[Route('/participant/{id}', name: 'app_participant', methods: ['GET'])]
+    #[Route('/api/participant/{id}', name: 'app_participant', methods: ['GET'])]
     public function show(EntityManagerInterface $entityManager, int $id): JsonResponse
     {
         $participant = $entityManager->getRepository(Participant::class)->find($id);

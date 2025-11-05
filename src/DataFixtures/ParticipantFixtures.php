@@ -33,6 +33,6 @@ class ParticipantFixtures extends Fixture implements FixtureGroupInterface
     public static function getGroups(): array
     {
         // TODO: Implement getGroups() method.
-        return ['done'];
+        return ['make'];
     }
 }
