@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 
+use App\Entity\Hackathon;
 use App\Entity\Projet;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;

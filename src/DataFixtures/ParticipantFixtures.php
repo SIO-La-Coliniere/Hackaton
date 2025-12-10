@@ -19,7 +19,7 @@ class ParticipantFixtures extends Fixture implements FixtureGroupInterface
             $participant->setNom('Johnny');
             $participant->setPrenom('Doe');
             $participant->setDateNaissance(new \DateTime('1990-01-01'));
-            $participant->setEmail('Johnny Doe@example.com');
+            $participant->setEmail('JohnnyDoe@example.com');
             $participant->setTelephone('0123456789');
             $participant->setLienPortefolio('https://github.com/JohnnyDoe');
             $manager->persist($participant);

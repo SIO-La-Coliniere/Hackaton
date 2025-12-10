@@ -2,12 +2,24 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata as API;
 use App\Repository\HackathonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: HackathonRepository::class)]
+#[API\ApiResource(
+    operations: [
+        new API\Get(normalizationContext: ['groups' => ['hackathon:read']]),
+        new API\GetCollection(normalizationContext: ['groups' => ['hackathon:read']]),
+        new API\Post(security: "is_granted('ROLE_ADMIN')", denormalizationContext: ['groups' => ['hackathon:write']]),
+        new API\Patch(security: "is_granted('ROLE_ADMIN')", denormalizationContext: ['groups' => ['hackathon:write']]),
+        new API\Delete(security: "is_granted('ROLE_ADMIN')"),
+    ],
+    normalizationContext: ['groups' => ['hackathon:read']]
+)]
 class Hackathon
 {
     #[ORM\Id]
@@ -16,21 +28,27 @@ class Hackathon
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(["hackathon:read", "hackathon:write"])]
     private ?\DateTime $dateHeureDebut = null;
 
     #[ORM\Column]
+    #[Groups(["hackathon:read", "hackathon:write"])]
     private ?\DateTime $dateHeureFin = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["hackathon:read", "hackathon:write"])]
     private ?string $lieu = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["hackathon:read", "hackathon:write"])]
     private ?string $ville = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["hackathon:read", "hackathon:write"])]
     private ?string $theme = null;
 
     #[ORM\ManyToOne(inversedBy: 'hackathons')]
+    #[Groups(["hackathon:read", "hackathon:write"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Organisateur $organisateur = null;
 

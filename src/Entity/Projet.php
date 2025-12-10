@@ -2,12 +2,23 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata as API;
 use App\Repository\ProjetRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjetRepository::class)]
+#[API\ApiResource(
+    operations: [
+        new API\Get(normalizationContext: ['groups' => ['projet:read']]),
+        new API\GetCollection(normalizationContext: ['groups' => ['projet:read']]),
+        new API\Post(security: "is_granted('ROLE_ADMIN')", denormalizationContext: ['groups' => ['projet:write']]),
+        new API\Patch(security: "is_granted('ROLE_ADMIN')", denormalizationContext: ['groups' => ['projet:write']]),
+        new API\Delete(security: "is_granted('ROLE_ADMIN')"),
+    ],
+    normalizationContext: ['groups' => ['projet:read']]
+)]
 class Projet
 {
     #[ORM\Id]

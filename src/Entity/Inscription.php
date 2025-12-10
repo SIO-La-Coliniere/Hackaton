@@ -2,11 +2,27 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata as API;
 use App\Repository\InscriptionRepository;
+use App\State\InscriptionCreateProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InscriptionRepository::class)]
+#[API\ApiResource(
+    operations: [
+        new API\Get(normalizationContext: ['groups' => ['inscription:read']]),
+        new API\GetCollection(security: "is_granted('ROLE_ADMIN')", normalizationContext: ['groups' => ['inscription:read']]),
+        new API\Post(
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            processor: InscriptionCreateProcessor::class,
+            denormalizationContext: ['groups' => ['inscription:write']]
+        ),
+        new API\Patch(security: "is_granted('ROLE_ADMIN')", denormalizationContext: ['groups' => ['inscription:write']]),
+        new API\Delete(security: "is_granted('ROLE_ADMIN')"),
+    ],
+    normalizationContext: ['groups' => ['inscription:read']]
+)]
 class Inscription
 {
     #[ORM\Id]
@@ -30,6 +46,12 @@ class Inscription
     #[ORM\ManyToOne(inversedBy: 'inscription')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Hackathon $hackathon = null;
+
+    #[ORM\ManyToOne(inversedBy: 'inscriptions')]
+    private ?Equipe $regrouper = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Equipe $etreResponable = null;
 
     public function getId(): ?int
     {
@@ -92,6 +114,30 @@ class Inscription
     public function setHackathon(?Hackathon $hackathon): static
     {
         $this->hackathon = $hackathon;
+
+        return $this;
+    }
+
+    public function getRegrouper(): ?Equipe
+    {
+        return $this->regrouper;
+    }
+
+    public function setRegrouper(?Equipe $regrouper): static
+    {
+        $this->regrouper = $regrouper;
+
+        return $this;
+    }
+
+    public function getEtreResponable(): ?Equipe
+    {
+        return $this->etreResponable;
+    }
+
+    public function setEtreResponable(?Equipe $etreResponable): static
+    {
+        $this->etreResponable = $etreResponable;
 
         return $this;
     }

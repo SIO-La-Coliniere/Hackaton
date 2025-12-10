@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata as API;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -9,6 +10,24 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[API\ApiResource(
+    shortName: 'User',
+    description: 'Utilisateurs de l’application Hackathon (authentification et rôles)',
+    operations: [
+        new API\GetCollection(security: "is_granted('ROLE_ADMIN')"),
+        new API\Get(security: "is_granted('ROLE_ADMIN') or object == user"),
+        new API\Post(
+            uriTemplate: '/register',
+            security: "is_granted('PUBLIC_ACCESS')",
+            denormalizationContext: ['groups' => ['user:write']]
+        ),
+        new API\Patch(security: "is_granted('ROLE_ADMIN') or object == user"),
+        new API\Delete(security: "is_granted('ROLE_ADMIN')")
+    ],
+    normalizationContext: ['groups' => ['user:read']],
+    denormalizationContext: ['groups' => ['user:write']],
+    security: "is_granted('ROLE_USER')"
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -22,7 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var list<string> The user roles
      */
-    #[ORM\Column]
+    #[ORM\Column(type: 'json')]
     private array $roles = [];
 
     /**

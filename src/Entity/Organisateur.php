@@ -2,12 +2,26 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata as API;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\{Get, GetCollection, Post, Patch, Delete};
 use App\Repository\OrganisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrganisateurRepository::class)]
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Post(security: "is_granted('ROLE_ADMIN')"),
+        new Patch(security: "is_granted('ROLE_ADMIN')"),
+        new Delete(security: "is_granted('ROLE_ADMIN')")
+    ],
+    normalizationContext: ['groups' => ['organisateur:read']],
+    denormalizationContext: ['groups' => ['organisateur:write']]
+)]
 class Organisateur
 {
     #[ORM\Id]
